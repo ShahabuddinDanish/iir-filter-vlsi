@@ -19,15 +19,15 @@ end iirfilter;
 
 architecture Behavioral of iirfilter is
     
-    signal sw_reg_in   : SIGNED(31 downto 0) := (others => '0');
-	signal sw_reg_out  : SIGNED(31 downto 0) := (others => '0');
-	signal y_reg_in    : SIGNED(13 downto 0) := (others => '0'); 
-	signal x_reg_out   : SIGNED(13 downto 0) := (others => '0');
-	signal ai_reg_out  : SIGNED(13 downto 0) := (others => '0');
-	signal bi_reg_out  : SIGNED(13 downto 0) := (others => '0');
-	signal bi0_reg_out : SIGNED(13 downto 0) := (others => '0');
-    signal ff_signal   : SIGNED(31 downto 0) := (others => '0');
-    signal fb_signal   : SIGNED(31 downto 0) := (others => '0');
+    signal sw_reg_in   : SIGNED(NB downto 0) := (others => '0');
+	signal sw_reg_out  : SIGNED(NB downto 0) := (others => '0');
+	signal y_reg_in    : SIGNED(NB-1 downto 0) := (others => '0'); 
+	signal x_reg_out   : SIGNED(NB-1 downto 0) := (others => '0');
+	signal ai_reg_out  : SIGNED(NB-1 downto 0) := (others => '0');
+	signal bi_reg_out  : SIGNED(NB-1 downto 0) := (others => '0');
+	signal bi0_reg_out : SIGNED(NB-1 downto 0) := (others => '0');
+    signal ff_signal   : SIGNED(NB-1 downto 0) := (others => '0');
+    signal fb_signal   : SIGNED(NB downto 0) := (others => '0');
 	signal vin_reg_out : STD_LOGIC := '0';
 
 
@@ -59,7 +59,7 @@ begin
 
     DIN_reg   :   reg 
         generic map (
-            WIDTH   => 14 
+            WIDTH   => NB 
         )
         port map (
             CLK     =>  CLK,
@@ -71,7 +71,7 @@ begin
 
     SW_reg   :   reg 
         generic map (
-            WIDTH   =>  32
+            WIDTH   =>  NB+1
         )
         port map (
             CLK     =>  CLK,
@@ -83,7 +83,7 @@ begin
 
     ai_reg   :   reg 
         generic map (
-            WIDTH   =>  14
+            WIDTH   =>  NB
         )
         port map (
             CLK     =>  CLK,
@@ -95,7 +95,7 @@ begin
 
     bi_reg   :   reg 
         generic map (
-            WIDTH   =>  14
+            WIDTH   =>  NB
         )
         port map (
             CLK     =>  CLK,
@@ -107,7 +107,7 @@ begin
 
     bi0_reg   :   reg 
         generic map (
-            WIDTH   =>  14
+            WIDTH   =>  NB
         )
         port map (
             CLK     =>  CLK,
@@ -119,7 +119,7 @@ begin
 
     DOUT_reg   :   reg 
         generic map (
-            WIDTH   =>  14
+            WIDTH   =>  NB
         )
         port map (
             CLK     =>  CLK,
@@ -130,13 +130,12 @@ begin
     );
 
 
-    fb_signal <= (extract_32_bits(((sw_reg_out * resize(ai_reg_out, 32)) srl SHAMT) sll 8));
+    fb_signal <= extract_15_bits((((sw_reg_out * ai_reg_out) srl SHAMT) sll 8));
 
-    ff_signal <= (extract_32_bits((((sw_reg_out * resize(bi_reg_out, 32)) srl SHAMT) sll 8)));
+    ff_signal <= extract_14_bits((((sw_reg_out * bi_reg_out) srl SHAMT) sll 8));
 
-    sw_reg_in <= (resize(x_reg_out, 32) - fb_signal);
+    sw_reg_in <= (x_reg_out - fb_signal);
     
-    y_reg_in <= resize(((extract_32_bits((((sw_reg_in * resize(bi0_reg_out, 32)) srl SHAMT) sll 8))) + ff_signal), 14);
+    y_reg_in <= (extract_14_bits(((sw_reg_in * bi0_reg_out) srl SHAMT) sll 8) + ff_signal);
 
 end Behavioral;
-
