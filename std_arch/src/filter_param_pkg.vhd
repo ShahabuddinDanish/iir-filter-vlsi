@@ -1,14 +1,15 @@
 library IEEE;
-    use IEEE.STD_LOGIC_1164.ALL;
-    use IEEE.NUMERIC_STD.ALL;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
 package filter_package is
-  constant N      : integer := 1;                 -- Order of the filter
-  constant NTm1   : integer := N;                 -- Number of coefficients minus one (order)
-  constant NB     : integer := 14;                -- Number of bits
-  constant SHAMT  : integer := 21;                -- Shift amount
+    constant N      : integer := 1;                 -- Order of the filter
+    constant NTm1   : integer := N;                 -- Number of coefficients minus one (order)
+    constant NB     : integer := 14;                -- Number of bits
+    constant SHAMT  : integer := 21;                -- Shift amount
 
-  function extract_32_bits(data: signed) return signed	;
+  function extract_14_bits(data: signed) return signed;
+  function extract_15_bits(data: signed) return signed;
 
   component reg is
     generic (
@@ -40,9 +41,14 @@ end package filter_package;
 
 package body filter_package is
 
-    function extract_32_bits(data: signed) return signed is
-    begin
-        return data(31 downto 0);
-    end function;
+  function extract_14_bits(data: signed) return signed is
+  begin
+      return data(13 downto 0);
+  end function;
+
+  function extract_15_bits(data: signed) return signed is
+  begin
+      return data(14 downto 0);
+  end function;
 
 end package body filter_package;
