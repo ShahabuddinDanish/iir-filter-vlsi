@@ -1,6 +1,6 @@
-# IIR Digital Filter — Full VLSI Design & Implementation
+# IIR Digital Filter — VLSI Design & Implementation
 
-> A complete ASIC design flow for a 1st-order IIR low-pass filter: from mathematical specification and fixed-point modeling through RTL, logic synthesis, clock gating, and place & route — implemented in two architectures, with the optimized design achieving **581 MHz** through J-look-ahead, pipelining, and retiming.
+> A complete ASIC design flow for a 1st-order IIR low-pass filter: from mathematical specification and fixed-point modeling through RTL, logic synthesis, clock gating, and place & route, implemented in two architectures, with the optimized design achieving **581 MHz** through J-look-ahead, pipelining, and retiming.
 
 ![VHDL](https://img.shields.io/badge/RTL-VHDL-blue)
 ![C](https://img.shields.io/badge/Model-C-lightgrey)
@@ -302,7 +302,7 @@ Import the clock-gated netlist and SDC into Cadence Innovus. The SDC clock perio
 
 ---
 
-## Key Design Decisions
+## Design Decisions
 
 **Why Direct Form II?**  
 Direct Form II minimizes the number of delay elements (registers) by sharing the state variable between the feedforward and feedback paths, making it the most hardware-efficient structure for a 1st-order IIR filter.
