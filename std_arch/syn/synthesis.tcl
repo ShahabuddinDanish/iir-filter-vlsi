@@ -14,7 +14,7 @@ uniquify
 link
 
 # applying constraints
-set WCP 7.44
+set WCP 2.77
 create_clock -name "MY_CLK" -period $WCP CLK
 set_dont_touch_network MY_CLK
 
@@ -22,7 +22,7 @@ set_dont_touch_network MY_CLK
 set_clock_uncertainty 0.07 [get_clocks MY_CLK]
 
 # verify the clock
-report_clock > ./reports/clock_fm_half.rpt
+report_clock > ./reports/gatedclock_fmax.rpt
 
 # max output delay
 set_input_delay 0.5 -max -clock MY_CLK [remove_from_collection [all_inputs] CLK]
@@ -37,9 +37,9 @@ check_design
 compile -gate_clock
 
 # timing, area and power report
-report_timing > ./reports/timing_fm_half.rpt
-report_area > ./reports/area_fm_half.rpt
-report_power > ./reports/power_fm_half.rpt 
+report_timing > ./reports/gatedtiming_fmax.rpt
+report_area > ./reports/gatedarea_fmax.rpt
+#report_power > ./reports/power_fmax.rpt 
 
 # export netlist
 ungroup -all -flatten
