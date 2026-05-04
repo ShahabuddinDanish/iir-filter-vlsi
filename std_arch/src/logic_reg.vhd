@@ -46,5 +46,3 @@ configuration REG2_BEHAVIORAL_CFG of LOGICREG is
  for Behavioral
  end for;
 end REG2_BEHAVIORAL_CFG;
-
-
